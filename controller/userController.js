@@ -23,7 +23,10 @@ const login = (req , res) => {
             if(!user) {
                 return res.status(400).send('user not exist please register')
             }
-            console.log(await User.findOne({email : reqParam.email}).select('status'));
+            if(!user.status){
+                return res.status(400).send('Please verify your account')
+            }
+            console.log(user.status);
             res.status(201).send(user)
 
         }
