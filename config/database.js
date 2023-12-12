@@ -1,4 +1,3 @@
-const Mongoose = require('mongoose');
 require('dotenv').config();
 
 

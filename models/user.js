@@ -32,6 +32,10 @@ const User = new Mongoose.Schema({
       dob: {
         type: String,
         default: null
+      },
+      otp: {
+        type : Number,
+        default: null
       }
 })
 
