@@ -36,7 +36,10 @@ const User = new Mongoose.Schema({
       otp: {
         type : Number,
         default: null
-      }
+      } ,
+      
+} , {
+  timestamps : true
 })
 
 exports.User = Mongoose.model('User' , User)

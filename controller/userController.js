@@ -22,7 +22,7 @@ const login = (req , res) => {
     const reqParam = req.body;
     validateLoginUser(reqParam , res , async (validate) =>{
         if(validate) {
-            const user = await User.findOne({email : reqParam.email})
+            const user = await User.findOne({email : reqParam.email , password : reqParam.password})
             if(!user) {
                 return res.status(400).send('user not exist please register')
             }
@@ -62,8 +62,73 @@ const verfyUser = async (req , res) => {
     }
 }
 
+const sendOtp = async (req , res) => {
+    const reqParam = req.body;
+    const user = await User.findOne({email: reqParam.email});
+    if(!user){
+        return res.status(400).send('user not found');
+    }   
+    const otp = otpGenerate();
+    constUpdateOtp = await User.updateOne({
+        email: reqParam.email
+    },{
+        $set : {
+            otp :otp
+        }
+    })
+    if(constUpdateOtp.modifiedCount){
+        return res.status(200).send({
+            'otp' : otp
+        })
+    } else {
+        return res.status(400).send('something went wrong!!!!')
+
+    }
+}
+
+const verifyOtp = async (req , res) => {
+    const reqParam = req.body;
+    const user = await User.findOne({otp: reqParam.otp});
+    if(!user){
+        return res.status(400).send('user not found');
+    }
+    return res.status(200).send('user found');
+}
+
+const forgotPass = async (req ,res) => {
+    const reqParam = req.body;
+    const user = await User.findOne({email: reqParam.email});
+    if(!user){
+        return res.status(400).send('user not found');
+    }
+    if(user.password == reqParam.password){
+        return res.status(400).send('try with new password');
+    }   
+    constUpdateOtp = await User.updateOne({
+        email: reqParam.email
+    },{
+        $set : {
+            otp :null,
+            password : reqParam.password
+        }
+    })
+    if(constUpdateOtp.modifiedCount){
+    
+    }
+    if(constUpdateOtp.modifiedCount){
+        return res.status(200).send('password updated')
+
+    } else {
+        return res.status(400).send('something went wrong!!!!')
+
+    }
+
+}
 module.exports = {
     register ,
     login ,
-    verfyUser
+    verfyUser ,
+    sendOtp , 
+    verifyOtp ,
+    forgotPass
 }
