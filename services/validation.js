@@ -13,6 +13,7 @@ module.exports = {
         password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).required(),
         user_type: Joi.number().integer().required(),
         dob : Joi.string().regex(/^\d{2}-\d{2}-\d{4}$/).required(),
+        number : Joi.string().required()
     });
     const { error } = userRegisterSchema.validate(req);
     if(error) {
@@ -31,5 +32,19 @@ module.exports = {
       return res.status(400).send(error.details[0].message);
     }
     return callback(true);
+  },
+
+  validateCategory : (req,res,cb) => {
+    const categoryAddSchema = Joi.object({
+      name : Joi.string().required(),
+      desc : Joi.string().required(),
+      image : Joi.string().required()
+    })
+    const { error } = categoryAddSchema.validate(req);
+    if(error){
+      return res.status(400).send(error.details[0].message);
+    }
+    return cb(true);
   }
+
 };

@@ -1,15 +1,18 @@
 const { User } = require("../models/user");
 const { otpGenerate } = require("../services/custom");
 const {validateRegisterUser ,validateLoginUser} = require("../services/validation")
-
-
+const bcrypt = require('bcrypt');
 
 const register = (req, res) => {
     const reqParam = req.body;
     validateRegisterUser(reqParam, res, async (validate) => {
         if(validate){
-            const user = await User.findOne({email : reqParam.email})     
+            const user = await User.findOne({email : reqParam.email , number : reqParam.number})
             if(user) return res.status(400).send('user is already exist')
+            const salt = await bcrypt.genSalt(parseInt(process.env.saltRounds));    
+            const hashedPassword = await bcrypt.hash(reqParam.password, salt);
+            reqParam.password = hashedPassword;
+
             const otp = otpGenerate();
             reqParam.otp = otp;
             const newUser = await User.create(reqParam);                                                                                                                              
@@ -22,15 +25,19 @@ const login = (req , res) => {
     const reqParam = req.body;
     validateLoginUser(reqParam , res , async (validate) =>{
         if(validate) {
-            const user = await User.findOne({email : reqParam.email , password : reqParam.password})
+            const user = await User.findOne({email : reqParam.email })
             if(!user) {
                 return res.status(400).send('user not exist please register')
             }
             if(!user.status){
                 return res.status(400).send('Please verify your account')
             }
-            res.status(201).send(user)
-
+            const passwordMatch = await bcrypt.compare(reqParam.password, user.password);
+            if(passwordMatch){
+                res.status(201).send(user)
+            } else {
+                return res.status(400).send('wrong password')
+            }
         }
     })
 }
@@ -69,14 +76,14 @@ const sendOtp = async (req , res) => {
         return res.status(400).send('user not found');
     }   
     const otp = otpGenerate();
-    constUpdateOtp = await User.updateOne({
+    const UpdateOtp = await User.updateOne({
         email: reqParam.email
     },{
         $set : {
             otp :otp
         }
     })
-    if(constUpdateOtp.modifiedCount){
+    if(UpdateOtp.modifiedCount){
         return res.status(200).send({
             'otp' : otp
         })
@@ -104,7 +111,7 @@ const forgotPass = async (req ,res) => {
     if(user.password == reqParam.password){
         return res.status(400).send('try with new password');
     }   
-    constUpdateOtp = await User.updateOne({
+    const UpdateOtp = await User.updateOne({
         email: reqParam.email
     },{
         $set : {
@@ -112,7 +119,7 @@ const forgotPass = async (req ,res) => {
             password : reqParam.password
         }
     })
-    if(constUpdateOtp.modifiedCount){
+    if(UpdateOtp.modifiedCount){
     
     }
     if(constUpdateOtp.modifiedCount){

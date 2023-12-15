@@ -1,6 +1,7 @@
 const express = require('express')
 const { connectToMongoDB } = require('./config/database')
 const router = require('./routes')
+require('dotenv').config();
 
 const app = express()
 const port = 7869
