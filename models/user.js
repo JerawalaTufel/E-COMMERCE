@@ -41,7 +41,11 @@ const User = new Mongoose.Schema({
         type : Number,
         default: null
       } ,
-      
+      token : {
+        type: String,
+        default: null
+      }
+
 } , {
   timestamps : true
 })

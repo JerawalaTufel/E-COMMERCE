@@ -2,6 +2,8 @@ const { User } = require("../models/user");
 const { otpGenerate } = require("../services/custom");
 const {validateRegisterUser ,validateLoginUser} = require("../services/validation")
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
 
 const register = (req, res) => {
     const reqParam = req.body;
@@ -34,7 +36,21 @@ const login = (req , res) => {
             }
             const passwordMatch = await bcrypt.compare(reqParam.password, user.password);
             if(passwordMatch){
-                res.status(201).send(user)
+                
+                const token = jwt.sign({ id: user.id, name: user.name }, process.env.secretKey, { expiresIn: '1h' });
+                const updatedUser = await User.findByIdAndUpdate(
+                    user.id,
+                    {
+                        $set : {
+                            token : token
+                        }
+                },{
+                    new: true
+                }
+                );
+                res.status(201).send({
+                    'user-data' : updatedUser
+                })
             } else {
                 return res.status(400).send('wrong password')
             }
