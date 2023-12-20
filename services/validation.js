@@ -45,6 +45,19 @@ module.exports = {
       return res.status(400).send(error.details[0].message);
     }
     return cb(true);
-  }
+  },
 
+  validateSubCategory : (req,res,cb) => {
+    const subCategoryAddSchema = Joi.object({
+      catId : Joi.string().required(), 
+      name : Joi.string().required(),
+      desc : Joi.string().required(),
+      image : Joi.string().required()
+    })
+    const { error } = subCategoryAddSchema.validate(req);
+    if(error){
+      return res.status(400).send(error.details[0].message);
+    }
+    return cb(true);
+  }
 };

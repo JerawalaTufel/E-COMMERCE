@@ -12,6 +12,8 @@ const Category = new Mongoose.Schema({
         type: String,
         require: true
     }
+},{
+    timestamps : true
 })
 
 exports.Category = Mongoose.model('Category' , Category)

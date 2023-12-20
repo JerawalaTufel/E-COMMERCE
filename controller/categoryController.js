@@ -1,4 +1,5 @@
 const { Category } = require("../models/category");
+const { SubCategory } = require("../models/subCategory");
 const { validateCategory } = require("../services/validation");
 
 
@@ -51,9 +52,20 @@ const deleteCategory = async (req , res) => {
     return res.status(200).json({ message: 'Category deleted successfully' });
 }
 
+const listofSubCategory = async (req , res) => {
+    const queryParams = req.params;
+    const reqPeram = req.body;
+
+    const subCategory = await SubCategory.find({catId : queryParams.id});
+    if(!subCategory) return res.status(400).send('subcategory is not exits')
+    
+    return res.status(200).json({ 'sub-categories': subCategory });
+}
+
 module.exports = {
     editCategory,
     listCategory,
     addCategory,
-    deleteCategory
+    deleteCategory,
+    listofSubCategory
 }
