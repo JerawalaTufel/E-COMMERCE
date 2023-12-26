@@ -1,3 +1,4 @@
+const { addCart } = require('../controller/cartController');
 const { addCategory, listCategory, editCategory, deleteCategory, listofSubCategory } = require('../controller/categoryController');
 const { addProduct, listProduct, editProduct, deleteProduct } = require('../controller/productController');
 const { addSubCategory , listSubCategory , editSubCategory , deleteSubCategory} = require('../controller/subCategoryController');
@@ -22,4 +23,7 @@ const apiRoute = require('express').Router();
     apiRoute.get('/listAllProduct',listProduct)
     apiRoute.put('/editProduct/:id',editProduct)
     apiRoute.delete('/deleteProduct/:id',deleteProduct)
+
+//cart routes
+apiRoute.post('/addCart' , addCart)
 module.exports = apiRoute

@@ -72,5 +72,17 @@ module.exports = {
       return res.status(400).send(error.details[0].message);
     }
     return cb(true);
+  },
+
+  validateCart : (req ,res ,cb) => {
+    const cartSchema = Joi.object({
+      prodId : Joi.string().required(), 
+      qry : Joi.number().integer().required(),
+    })
+    const {error} = cartSchema.validate(req);
+    if(error) {
+      return res.status(400).send(error.details[0].message);
+    }
+    return cb(true);
   }
 };
