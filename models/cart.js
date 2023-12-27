@@ -16,6 +16,8 @@ const Cart = new Mongoose.Schema({
         type : Number,
         require: true
     }
+},{
+    timestamps: true
 })
 
 exports.Cart = Mongoose.model('Cart' , Cart)
