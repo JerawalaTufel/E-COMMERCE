@@ -3,7 +3,7 @@ const { validateProduct } = require("../services/validation");
 
 const listProduct = async (req , res) => {
     try {
-        const product = await Product.find().populate('proId');
+        const product = await Product.find().populate('subCatId');
         return res.status(200).json({ product });
       } catch (error) {
         return res.status(500).json({ error: error });
@@ -17,7 +17,7 @@ const addProduct = async (req , res) => {
             const product = await Product.findOne({name : reqPeram.name})
             if(product) {
                 return res.status(400).send({
-                    'message' : 'sub category already exists'
+                    'message' : 'product already exists'
                 })
             }
             const newProduct = await Product.create(reqPeram)

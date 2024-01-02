@@ -1,7 +1,7 @@
 const Mongoose = require("mongoose");
 
 const Product = new Mongoose.Schema({
-    proId :{
+    subCatId :{
         type : Mongoose.SchemaTypes.ObjectId,
         ref : 'SubCategory',
         require : true
@@ -16,6 +16,10 @@ const Product = new Mongoose.Schema({
     image: {
         type: String,
         require: true
+    },
+    price : {
+        type: Number,
+        require : true
     }
 },{
     timestamps : true

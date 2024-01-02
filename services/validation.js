@@ -62,10 +62,11 @@ module.exports = {
   },
   validateProduct : (req,res,cb) => {
     const subCategoryAddSchema = Joi.object({
-      proId : Joi.string().required(), 
+      subCatId : Joi.string().required(), 
       name : Joi.string().required(),
       desc : Joi.string().required(),
-      image : Joi.string().required()
+      image : Joi.string().required(),
+      price: Joi.number().required()
     })
     const { error } = subCategoryAddSchema.validate(req);
     if(error){
