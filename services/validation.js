@@ -85,5 +85,21 @@ module.exports = {
       return res.status(400).send(error.details[0].message);
     }
     return cb(true);
+  } ,
+  validPayment : (req , res , cb) => {
+    const paymentSchema = Joi.object({
+      name: Joi.string().required(),
+      email: Joi.string().email().required(),
+      cardNumber: Joi.string().creditCard().required(), 
+      exp_year: Joi.number().integer().required(),
+      exp_month: Joi.number().integer().required(),
+      cvc: Joi.number().integer().required(),
+      amount : Joi.number().integer().required(),
+    })
+    const {error} = paymentSchema.validate(req);
+    if(error) {
+      return res.status(400).send(error.details[0].message);
+    }
+    return cb(true);
   }
 };
