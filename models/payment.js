@@ -1,7 +1,7 @@
 const Mongoose = require("mongoose");
 
 
-const Cart = new Mongoose.Schema({
+const Payment = new Mongoose.Schema({
     userId : {
         type : Mongoose.SchemaTypes.ObjectId,
         ref : 'User',
@@ -9,19 +9,13 @@ const Cart = new Mongoose.Schema({
     } , 
     customerId : {
         type : String,
-        require : true
-    } , 
-    cardId : {
-        type : String,
-        require: true
+        require : true        
     },
-    prodId : {
-        type : Mongoose.SchemaTypes.ObjectId,
-        ref : 'Product',
-        require : true
-    } , 
+    paymentId : {
+        type: [String],
+    }
 },{
     timestamps: true
 })
 
-exports.Cart = Mongoose.model('Cart' , Cart)
+exports.Payment = Mongoose.model('Payment' , Payment)

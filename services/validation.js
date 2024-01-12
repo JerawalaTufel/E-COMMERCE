@@ -89,11 +89,7 @@ module.exports = {
   validPayment : (req , res , cb) => {
     const paymentSchema = Joi.object({
       name: Joi.string().required(),
-      email: Joi.string().email().required(),
-      cardNumber: Joi.string().creditCard().required(), 
-      exp_year: Joi.number().integer().required(),
-      exp_month: Joi.number().integer().required(),
-      cvc: Joi.number().integer().required(),
+      email : Joi.string().email().required(),
       amount : Joi.number().integer().required(),
     })
     const {error} = paymentSchema.validate(req);
