@@ -37,7 +37,7 @@ const login = (req , res) => {
             const passwordMatch = await bcrypt.compare(reqParam.password, user.password);
             if(passwordMatch){
                 
-                const token = jwt.sign({ id: user.id, name: user.name }, process.env.secretKey, { expiresIn: '1h' });
+                const token = jwt.sign({ id: user.id, name: user.name }, process.env.secretKey, { expiresIn: '2h' });
                 const updatedUser = await User.findByIdAndUpdate(
                     user.id,
                     {
